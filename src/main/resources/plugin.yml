@@ -1,0 +1,4 @@
+name: SmartMessage
+version: '1.0.0'
+main: it.moro.smartmessage.SmartMessage
+api-version: '1.21'
