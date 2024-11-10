@@ -1,4 +1,24 @@
 name: SmartMessage
 version: '1.0.0'
+authors: [MiniMoro]
 main: it.moro.smartmessage.SmartMessage
-api-version: '1.21'
+api-version: '1.13'
+
+permissions:
+  smartmessage.*:
+    description: all permissions
+    default: op
+    children:
+      smartmessage.message: true
+      smartmessage.link: true
+      smartmessage.cmd: true
+
+  smartmessage.message:
+    description: Permission to view chat messages
+    default: op
+  smartmessage.link:
+    description: Permission to view chat messages
+    default: op
+  smartmessage.cmd:
+    description: Permission to view chat messages
+    default: op

@@ -1,0 +1,42 @@
+# Time interval between messages in seconds
+message-interval: 60
+
+# To create a normal message leave blank with '' LINK and COMMAND and insert only TEXT
+# To create a message with an integrated (clickable) link, insert TEXT and LINK leaving COMMAND blank.
+# To create a message with an integrated (clickable) command insert TEXT and COMMAND leaving LINK blank
+# If all three items are entered, you will be notified of an error in the message.
+
+
+prefix: "&e[SmartMessage]"
+
+
+# Message Formatting
+#
+# message:
+#   name:
+#     text: ''
+#     link: ''
+#     command: ''
+#
+# In the formatting you can set an indicative name for the message,
+# replacing "name" with a name of your choice
+
+# To write on multiple lines, use "\n" to go to the bottom
+
+# You can remove or add messages as you like.
+# Default message list
+message:
+  one:
+    text: "%prefix% &aFirst test message"
+    link: ""
+    command: ""
+
+  two:
+    text: "%prefix% &3Second test message with link"
+    link: "https://www.spigotmc.org"
+    command: ""
+
+  three:
+    text: "%prefix% &bThird test message with command"
+    link: ""
+    command: "fly"
