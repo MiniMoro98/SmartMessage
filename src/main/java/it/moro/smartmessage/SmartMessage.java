@@ -58,7 +58,7 @@ public final class SmartMessage extends JavaPlugin {
             commands.add(config.getString("message." + key + ".command"));
         }
         if (texts.isEmpty()) {
-            texts.add("Errore!");
+            texts.add("Error!");
             links.add("");
             commands.add("");
             saveConfigFile();
@@ -69,7 +69,7 @@ public final class SmartMessage extends JavaPlugin {
         try {
             config.save(Configuration);
         } catch (IOException e) {
-            getLogger().severe("Impossibile salvare il file di configurazione!");
+            getLogger().severe("Unable to save configuration file!");
             e.fillInStackTrace();
         }
     }

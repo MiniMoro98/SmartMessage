@@ -6,7 +6,7 @@
 
     <groupId>it.moro.smartmessage</groupId>
     <artifactId>SmartMessage</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>SmartMessage</name>
@@ -58,12 +58,12 @@
                                 <argument>/c</argument>
                                 <argument>if</argument>
                                 <argument>exist</argument>
-                                <argument>C:\Users\Simone\Desktop\server test\plugins</argument>
+                                <argument>C:\Users\Simone\Desktop\ServerTest\plugins</argument>
                                 <argument>(</argument>
                                 <argument>xcopy</argument>
                                 <argument>/y</argument>
                                 <argument>C:\Plugins\SmartMessage\target\${project.name}-${project.version}.jar</argument>
-                                <argument>C:\Users\Simone\Desktop\server test\plugins</argument>
+                                <argument>C:\Users\Simone\Desktop\ServerTest\plugins</argument>
                                 <argument>)</argument>
                                 <argument>else</argument>
                                 <argument>(</argument>
