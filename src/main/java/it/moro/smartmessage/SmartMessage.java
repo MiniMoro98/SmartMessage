@@ -28,7 +28,6 @@ public final class SmartMessage extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("SmartMessage initialization for server version: " + Bukkit.getServer().getVersion());
-
         try {
             VersionHandlerFactory.getHandler();
             getLogger().info("Version compatibility detected successfully!");
@@ -38,7 +37,6 @@ public final class SmartMessage extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-
         genConfig();
         loadConfig();
         startMessage();
@@ -101,25 +99,20 @@ public final class SmartMessage extends JavaPlugin {
         String cmd = commands.get(index);
         String prefix = Objects.requireNonNull(config.getString("prefix")).replaceAll("&","§");
         String formattedText = text.replaceAll("%prefix%", prefix);
-
         VersionHandler versionHandler = VersionHandlerFactory.getHandler();
-
         if (link.isEmpty() && cmd.isEmpty() && !text.isEmpty()) {
-            // Messaggio semplice
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if(player.hasPermission("smartmessage.message")) {
                     versionHandler.sendClickableMessage(player, formattedText, null, null);
                 }
             }
         } else if (!link.isEmpty() && cmd.isEmpty() && !text.isEmpty()) {
-            // Messaggio con link
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if(player.hasPermission("smartmessage.link")) {
                     versionHandler.sendClickableMessage(player, formattedText, "URL", link);
                 }
             }
         } else if (link.isEmpty() && !cmd.isEmpty() && !text.isEmpty()) {
-            // Messaggio con comando
             if(!cmd.contains("/")) {
                 cmd = "/" + cmd;
             }
@@ -130,7 +123,6 @@ public final class SmartMessage extends JavaPlugin {
                 }
             }
         } else if (!link.isEmpty() && !cmd.isEmpty() && !text.isEmpty()) {
-            // Errore: entrambi link e comando specificati
             String errorMessage = "§e[SmartMessage] §cMessage '" + entry.get(index) +
                     "' §cError! Insert only a link or only a command, both functions are not supported.";
             for (Player player : Bukkit.getOnlinePlayers()) {
