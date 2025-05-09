@@ -1,8 +1,7 @@
 name: SmartMessage
-version: '1.0.0'
+version: ${project.version}
 authors: [MiniMoro]
 main: it.moro.smartmessage.SmartMessage
-api-version: '1.13'
 
 permissions:
   smartmessage.*:

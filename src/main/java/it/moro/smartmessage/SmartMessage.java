@@ -1,14 +1,13 @@
 package it.moro.smartmessage;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
+import it.moro.smartmessage.compatibility.VersionHandler;
+import it.moro.smartmessage.compatibility.VersionHandlerFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +27,18 @@ public final class SmartMessage extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getLogger().info("SmartMessage initialization for server version: " + Bukkit.getServer().getVersion());
+
+        try {
+            VersionHandlerFactory.getHandler();
+            getLogger().info("Version compatibility detected successfully!");
+        } catch (UnsupportedOperationException e) {
+            getLogger().severe("ERROR: " + e.getMessage());
+            getLogger().severe("The plugin will be disabled.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         genConfig();
         loadConfig();
         startMessage();
@@ -89,46 +100,42 @@ public final class SmartMessage extends JavaPlugin {
         String link = links.get(index);
         String cmd = commands.get(index);
         String prefix = Objects.requireNonNull(config.getString("prefix")).replaceAll("&","§");
+        String formattedText = text.replaceAll("%prefix%", prefix);
+
+        VersionHandler versionHandler = VersionHandlerFactory.getHandler();
 
         if (link.isEmpty() && cmd.isEmpty() && !text.isEmpty()) {
-            Component mainMessage = Component.text(text.replaceAll("%prefix%", prefix));
+            // Messaggio semplice
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if(player.hasPermission("smartmessage.message")) {
-                    player.sendMessage(mainMessage);
+                    versionHandler.sendClickableMessage(player, formattedText, null, null);
                 }
             }
-
         } else if (!link.isEmpty() && cmd.isEmpty() && !text.isEmpty()) {
-            Component messaggioLink = Component.text(text.replaceAll("%prefix%", prefix)).clickEvent(ClickEvent.openUrl(link));
+            // Messaggio con link
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if(player.hasPermission("smartmessage.link")) {
-                    player.sendMessage(messaggioLink);
+                    versionHandler.sendClickableMessage(player, formattedText, "URL", link);
                 }
             }
-
         } else if (link.isEmpty() && !cmd.isEmpty() && !text.isEmpty()) {
-            Component messaggioComando = Component.text(text.replaceAll("%prefix%", prefix)).clickEvent(ClickEvent.runCommand("/" + cmd));
+            // Messaggio con comando
+            if(!cmd.contains("/")) {
+                cmd = "/" + cmd;
+            }
+            final String finalCmd = cmd;
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if(player.hasPermission("smartmessage.cmd")) {
-                    player.sendMessage(messaggioComando);
+                    versionHandler.sendClickableMessage(player, formattedText, "COMMAND", finalCmd);
                 }
             }
-
         } else if (!link.isEmpty() && !cmd.isEmpty() && !text.isEmpty()) {
-            Component messaggioComando = Component.text("§e[SmartMessage] §cMessage '" + entry.get(index)
-                    + "' §cError! Insert only a link or only a command, both functions are not supported.");
+            // Errore: entrambi link e comando specificati
+            String errorMessage = "§e[SmartMessage] §cMessage '" + entry.get(index) +
+                    "' §cError! Insert only a link or only a command, both functions are not supported.";
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if(player.isOp()) {
-                    player.sendMessage(messaggioComando);
-                }
-            }
-
-        } else if (link.isEmpty() && cmd.isEmpty()) {
-            Component messaggioComando = Component.text("§e[SmartMessage] §cMessage '" + entry.get(index)
-                    + "' §cError! All entries are empty.");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if(player.isOp()) {
-                    player.sendMessage(messaggioComando);
+                if (player.hasPermission("smartmessage.message")) {
+                    versionHandler.sendClickableMessage(player, errorMessage, null, null);
                 }
             }
         }
